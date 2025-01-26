@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chango&family=Josefin+Sans:wght@700&family=Single+Day&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bingo</title>
+  </head>
+  <body>
+    <div class="root">
+      <div class="container">
+        <div class="you">
+          <h2>You</h2>
+          <div class="box" id="box1"></div>
+          <div class="bingo b1">
+            <div id="B">B</div>
+            <div id="I">I</div>
+            <div id="N">N</div>
+            <div id="G">G</div>
+            <div id="O">O</div>
+          </div>
+          <button class="start">Generate Card</button>
+          <div class="turn hidden">Your Turn</div>
+          <div>
+            <button class="reset button hidden">Reset</button>
+          </div>
+        </div>
+
+        <div class="board">BINGO</div>
+
+        <div class="computer">
+          <h2>Computer</h2>
+          <div class="box" id="box2"></div>
+          <div class="bingo" id="b2">
+            <div id="B">B</div>
+            <div id="I">I</div>
+            <div id="N">N</div>
+            <div id="G">G</div>
+            <div id="O">O</div>
+          </div>
+          <div class="wait hidden">Computer's Turn</div>
+        </div>
+      </div>
+    </div>
+    <div class="vl"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

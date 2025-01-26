@@ -1,0 +1,66 @@
+body {
+  height: 100%;
+  overflow: hidden;
+  font-weight: bold;
+  color: black;
+  background-color: gray;
+}
+
+.board {
+  position: relative;
+  /* top: 13%; */
+  margin-top: 75px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  color: black;
+  width: 100px;
+  height: 100px;
+  border: 2px solid black;
+  z-index: 9;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 2px 5px 15px;
+  vertical-align: unset;
+  line-height: 90px;
+  font-size: 22px;
+}
+
+h2 {
+  position: relative;
+  top: 3%;
+  font-weight: bold;
+  font-size: 23px;
+  margin-bottom: 20px;
+}
+.container {
+  padding-top: 35px;
+  position: absolute;
+  width: 1200px;
+  height: 600px;
+  color: black;
+  border: 1px solid black;
+
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+
+  margin: auto;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.you {
+  background-color: white;
+  width: 50%;
+}
+
+.computer {
+  background-color: white;
+  width: 50%;
+}

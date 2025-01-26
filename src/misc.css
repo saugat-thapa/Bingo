@@ -1,0 +1,137 @@
+.bingo {
+  display: flex;
+  position: relative;
+  top: 6%;
+  text-align: center;
+  justify-content: center;
+  gap: 30px;
+  font-family: "Chango";
+  font-size: 25px;
+  margin-top: 20px;
+}
+
+.start {
+  margin-top: 15px;
+  position: relative;
+  top: 8%;
+  background-color: green;
+}
+
+.button {
+  margin-top: 15px;
+  position: relative;
+  bottom: -90px;
+
+  background-color: green;
+}
+
+.hidden {
+  display: none;
+}
+
+.enter {
+  color: black;
+  position: relative;
+  top: 8%;
+  margin-top: 15px;
+}
+
+input[type="number"]#number {
+  color: red;
+  font-weight: bold;
+  text-align: right;
+  width: 50px;
+  height: 30px;
+  border: 1px solid rgb(5, 5, 5);
+  background: white;
+  margin-bottom: 7px;
+}
+input[type="submit"] {
+  width: 50px;
+  background-color: gray;
+}
+
+.grayed {
+  color: gray;
+}
+
+.vl {
+  border-left: 2px solid black;
+  height: 600px;
+  position: relative;
+  left: 50%;
+  margin-left: -3px;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.wait {
+  color: black;
+  position: relative;
+  font-size: 22px;
+  font-weight: 100;
+  top: 8%;
+  margin-top: 15px;
+}
+
+.turn {
+  color: rgb(0, 0, 0);
+  position: relative;
+  font-size: 22px;
+  font-weight: 100;
+  top: 8%;
+  margin-top: 15px;
+}
+
+.offbox {
+  background-color: rgb(180, 177, 177);
+}
+
+.bingo-animate {
+  animation-name: bingo;
+  animation-duration: 0.6s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes bingo {
+  0% {
+  }
+  25% {
+    transform: rotate(20deg);
+  }
+  50% {
+    scale: 1.2;
+  }
+  75% {
+    transform: rotate(-20deg);
+  }
+  100% {
+    scale: 1;
+    font-size: 30px;
+  }
+}
+
+.fontlow {
+  animation-name: low;
+}
+
+.fonthigh {
+  animation-name: high;
+}
+
+@keyframes low {
+  0% {
+  }
+  100% {
+    font-weight: 100;
+  }
+}
+
+@keyframes high {
+  0% {
+  }
+  100% {
+    font-weight: 900;
+  }
+}

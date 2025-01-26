@@ -1,0 +1,58 @@
+.box {
+  width: 45%;
+  height: 45%;
+  top: 4%;
+  left: 28%;
+  display: grid;
+  position: relative;
+
+  grid-template-columns: repeat(5, auto);
+  grid-gap: 1px;
+  image-resolution: 100px;
+
+  grid-template-rows: 50px 50px 50px 50px 50px;
+  line-height: 55px;
+}
+
+h2 {
+  color: black;
+}
+
+.box > :nth-child(5n + 2),
+.box > :nth-child(5n + 3),
+.box > :nth-child(5n + 4),
+.box > :nth-child(5n + 5) {
+  border-left: 1px solid black;
+}
+
+.box > :nth-child(n + 6),
+.box > :nth-child(n + 6),
+.box > :nth-child(n + 7) {
+  border-top: 1px solid black;
+}
+
+.box > * {
+  position: relative;
+  overflow: visible;
+  background-color: #9f9999;
+  align-items: center;
+}
+
+.animated-number {
+  animation-name: chosen;
+  animation-fill-mode: forwards;
+  animation-duration: 0.5s;
+}
+
+@keyframes chosen {
+  0% {
+    scale: 0;
+  }
+  50% {
+    scale: 1.1;
+  }
+  100% {
+    scale: 1;
+    font-weight: bold;
+  }
+}
