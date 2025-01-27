@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import "./index.css";
+
 import "./container.css";
 import "./box.css";
 import "./misc.css";
@@ -11,11 +11,10 @@ let usedNumbers: number[] = [];
 let gameEnd = false;
 let playerTurn = true;
 
-// Track each player's 5x5 bingo grid
 let playerGrid: number[][] = [];
 let computerGrid: number[][] = [];
 
-// Track marked cells
+//empty grids
 let playerMarked: boolean[][] = Array.from({ length: row }, () =>
   Array(col).fill(false)
 );
@@ -23,7 +22,6 @@ let computerMarked: boolean[][] = Array.from({ length: row }, () =>
   Array(col).fill(false)
 );
 
-/** ✅ Creates an **empty** 5x5 grid with blank cells */
 const emptyGrid = (boxNumber: number) => {
   const container = document.querySelector(`#box${boxNumber}`);
   if (!container) return;
@@ -34,13 +32,12 @@ const emptyGrid = (boxNumber: number) => {
     for (let j = 0; j < col; j++) {
       const cell = document.createElement("div");
       cell.classList.add("cell");
-      cell.textContent = ""; // Empty cell
+      cell.textContent = "";
       container.appendChild(cell);
     }
   }
 };
 
-/** ✅ Generates a unique 5x5 grid of numbers (1-25) */
 const createCards = (): number[][] => {
   const usedNumbers: Set<number> = new Set();
 
@@ -59,7 +56,6 @@ const createCards = (): number[][] => {
   return cardNumbers;
 };
 
-/** ✅ Fills the grid with numbers */
 const createGrid = (cardNumbers: number[][], boxNumber: number) => {
   const container = document.querySelector(`#box${boxNumber}`);
   if (!container) return;
@@ -78,14 +74,12 @@ const createGrid = (cardNumbers: number[][], boxNumber: number) => {
   }
 };
 
-/** ✅ Shows empty grids at the beginning */
 const land = () => {
   emptyGrid(1);
   emptyGrid(2);
 };
 land();
 
-/** ✅ Generates new grids with numbers when game starts */
 const generate = () => {
   usedNumbers = [];
   playerTurn = true;
@@ -94,6 +88,7 @@ const generate = () => {
   playerGrid = createCards();
   computerGrid = createCards();
 
+  //mark tracking
   playerMarked = Array.from({ length: row }, () => Array(col).fill(false));
   computerMarked = Array.from({ length: row }, () => Array(col).fill(false));
 
@@ -123,6 +118,7 @@ const resetGame = () => {
   playerBingo = 0;
   computerBingo = 0;
 
+  //reset win condition
   markedRowsPlayer.fill(false);
   markedColumnsPlayer.fill(false);
   markedDiagonalsPlayer.fill(false);
@@ -130,37 +126,27 @@ const resetGame = () => {
   markedColumnsComputer.fill(false);
   markedDiagonalsComputer.fill(false);
 
-  // Reset the board's background color
   const board = document.querySelector(".board") as HTMLElement;
   board.innerHTML = "BINGO";
   board.style.lineHeight = "90px";
-  board.style.backgroundColor = "white"; // Reset to default white
+  board.style.backgroundColor = "white";
 
-  // Reset grid colors
   document.querySelectorAll(".cell").forEach((cell) => {
-    (cell as HTMLElement).style.backgroundColor = "white"; // Reset cell colors
+    (cell as HTMLElement).style.backgroundColor = "white";
   });
 
-  // Reset BINGO word color
   document.querySelectorAll(".b1 div, #b2 div").forEach((letter) => {
-    (letter as HTMLElement).style.backgroundColor = "white"; // Reset BINGO letters
-    letter.classList.remove("bingo-animate"); // Remove any animation class
+    (letter as HTMLElement).style.backgroundColor = "white";
+    letter.classList.remove("bingo-animate");
   });
 
-  // Show empty grids again
   land();
 
-  // Show start button again
   document.querySelector(".start")?.classList.remove("hidden");
   document.querySelector(".reset")?.classList.add("hidden");
 };
 
-/** ✅ Animates selected numbers */
-const duplicateAndAnimate = (
-  cell: HTMLElement,
-  num: string,
-  callback: () => void
-) => {
+const numAnimate = (cell: HTMLElement, num: string, callback: () => void) => {
   const board = document.querySelector(".board") as HTMLElement;
   if (!board) return;
 
@@ -210,7 +196,6 @@ const duplicateAndAnimate = (
   }, 1000);
 };
 
-/** ✅ Marks the selected number on both grids */
 const markNumberOnBoards = (num: number) => {
   let playerCells = document.querySelectorAll("#box1 .cell");
   let computerCells = document.querySelectorAll("#box2 .cell");
@@ -221,30 +206,29 @@ const markNumberOnBoards = (num: number) => {
         playerMarked[i][j] = true;
         let targetCell = playerCells[i * col + j];
         targetCell.style.background = "yellow";
-        targetCell.classList.add("animated-number"); // ✅ Fix: Add class to correct cell
+        targetCell.classList.add("animated-number");
       }
       if (computerGrid[i][j] === num) {
         computerMarked[i][j] = true;
         let targetCell = computerCells[i * col + j];
         targetCell.style.background = "yellow";
-        targetCell.classList.add("animated-number"); // ✅ Fix: Add class to correct cell
+        targetCell.classList.add("animated-number");
       }
     }
   }
   checkLine();
 };
 
-let markedLinesPlayer = 0; // Player's marked lines counter
-let markedLinesComputer = 0; // Computer's marked lines counter
-const maxLines = 5; // The game ends after 5 lines
-let markedRowsPlayer: boolean[] = Array(row).fill(false); // Player's tracked rows
-let markedColumnsPlayer: boolean[] = Array(col).fill(false); // Player's tracked columns
-let markedDiagonalsPlayer: boolean[] = [false, false]; // Player's tracked diagonals
-let markedRowsComputer: boolean[] = Array(row).fill(false); // Computer's tracked rows
-let markedColumnsComputer: boolean[] = Array(col).fill(false); // Computer's tracked columns
-let markedDiagonalsComputer: boolean[] = [false, false]; // Computer's tracked diagonals
+let markedLinesPlayer = 0;
+let markedLinesComputer = 0;
+const maxLines = 5;
+let markedRowsPlayer: boolean[] = Array(row).fill(false);
+let markedColumnsPlayer: boolean[] = Array(col).fill(false);
+let markedDiagonalsPlayer: boolean[] = [false, false];
+let markedRowsComputer: boolean[] = Array(row).fill(false);
+let markedColumnsComputer: boolean[] = Array(col).fill(false);
+let markedDiagonalsComputer: boolean[] = [false, false];
 
-/** ✅ Highlights BINGO letters in order as lines are marked */
 const highlightBingoLetters = (
   lineType: string,
   index: number,
@@ -255,57 +239,55 @@ const highlightBingoLetters = (
 
   let targetLetters = player ? bingoLetters : bingoLettersComputer;
 
-  // Ensure only the letters corresponding to the line count are highlighted
   if (player) {
     switch (markedLinesPlayer) {
       case 0:
         targetLetters[0].style.backgroundColor = "yellow";
-        targetLetters[0].classList.add("bingo-animate"); // Highlight 'B' for player
+        targetLetters[0].classList.add("bingo-animate");
         break;
       case 1:
         targetLetters[1].style.backgroundColor = "yellow";
-        targetLetters[1].classList.add("bingo-animate"); // Highlight 'I' for player
+        targetLetters[1].classList.add("bingo-animate");
         break;
       case 2:
         targetLetters[2].style.backgroundColor = "yellow";
-        targetLetters[2].classList.add("bingo-animate"); // Highlight 'N' for player
+        targetLetters[2].classList.add("bingo-animate");
         break;
       case 3:
         targetLetters[3].style.backgroundColor = "yellow";
-        targetLetters[3].classList.add("bingo-animate"); // Highlight 'G' for player
+        targetLetters[3].classList.add("bingo-animate");
         break;
       case 4:
         targetLetters[4].style.backgroundColor = "yellow";
-        targetLetters[4].classList.add("bingo-animate"); // Highlight 'O' for player
+        targetLetters[4].classList.add("bingo-animate");
         break;
     }
   } else {
     switch (markedLinesComputer) {
       case 0:
         targetLetters[0].style.backgroundColor = "yellow";
-        targetLetters[0].classList.add("bingo-animate"); // Highlight 'B' for computer
+        targetLetters[0].classList.add("bingo-animate");
         break;
       case 1:
         targetLetters[1].style.backgroundColor = "yellow";
-        targetLetters[1].classList.add("bingo-animate"); // Highlight 'I' for computer
+        targetLetters[1].classList.add("bingo-animate");
         break;
       case 2:
         targetLetters[2].style.backgroundColor = "yellow";
-        targetLetters[2].classList.add("bingo-animate"); // Highlight 'N' for computer
+        targetLetters[2].classList.add("bingo-animate");
         break;
       case 3:
         targetLetters[3].style.backgroundColor = "yellow";
-        targetLetters[3].classList.add("bingo-animate"); // Highlight 'G' for computer
+        targetLetters[3].classList.add("bingo-animate");
         break;
       case 4:
         targetLetters[4].style.backgroundColor = "yellow";
-        targetLetters[4].classList.add("bingo-animate"); // Highlight 'O' for computer
+        targetLetters[4].classList.add("bingo-animate");
         break;
     }
   }
 };
 
-/** ✅ Checks for a bingo (row, column, or diagonal) */
 const checkForLine = (grid: boolean[][], player: boolean): boolean => {
   const markedRows = player ? markedRowsPlayer : markedRowsComputer;
   const markedColumns = player ? markedColumnsPlayer : markedColumnsComputer;
@@ -313,43 +295,39 @@ const checkForLine = (grid: boolean[][], player: boolean): boolean => {
     ? markedDiagonalsPlayer
     : markedDiagonalsComputer;
 
-  // Check for rows
   for (let i = 0; i < row; i++) {
     if (grid[i].every((cell) => cell) && !markedRows[i]) {
-      markedRows[i] = true; // Mark this row as counted
+      markedRows[i] = true;
       highlightBingoLetters("row", i, player);
       if (player) markedLinesPlayer++;
-      else markedLinesComputer++; // Increment the marked line counter
+      else markedLinesComputer++;
       return true;
     }
   }
 
-  // Check for columns
   for (let j = 0; j < col; j++) {
     if (grid.every((row) => row[j]) && !markedColumns[j]) {
-      markedColumns[j] = true; // Mark this column as counted
+      markedColumns[j] = true;
       highlightBingoLetters("column", j, player);
       if (player) markedLinesPlayer++;
-      else markedLinesComputer++; // Increment the marked line counter
+      else markedLinesComputer++;
       return true;
     }
   }
 
-  // Check for main diagonal
   if (grid.every((_, i) => grid[i][i]) && !markedDiagonals[0]) {
-    markedDiagonals[0] = true; // Mark the main diagonal as counted
+    markedDiagonals[0] = true;
     highlightBingoLetters("diagonal", 0, player);
     if (player) markedLinesPlayer++;
-    else markedLinesComputer++; // Increment the marked line counter
+    else markedLinesComputer++;
     return true;
   }
 
-  // Check for anti-diagonal
   if (grid.every((_, i) => grid[i][col - i - 1]) && !markedDiagonals[1]) {
-    markedDiagonals[1] = true; // Mark the anti-diagonal as counted
+    markedDiagonals[1] = true;
     highlightBingoLetters("diagonal", 4, player);
     if (player) markedLinesPlayer++;
-    else markedLinesComputer++; // Increment the marked line counter
+    else markedLinesComputer++;
     return true;
   }
 
@@ -367,7 +345,6 @@ const checkLine = () => {
     computerBingo++;
   }
 
-  // End the game after 5 lines have been marked for either player or computer
   if (markedLinesPlayer === maxLines) {
     endGame("Player wins!");
   } else if (markedLinesComputer === maxLines) {
@@ -375,26 +352,22 @@ const checkLine = () => {
   }
 };
 
-/** ✅ Ends the game */
 const endGame = (message: string) => {
   gameEnd = true;
   const board = document.querySelector(".board");
 
-  // Clear any existing content on the board
   board!.innerHTML = "";
 
-  // Create the end message
   const endMessage = document.createElement("div");
   endMessage.textContent = message;
   endMessage.style.position = "absolute";
   endMessage.style.left = "50%";
   endMessage.style.top = "50%";
   endMessage.style.transform = "translate(-50%, -50%)";
-  endMessage.style.fontSize = "24px"; // Adjust font size as needed
-  endMessage.style.fontWeight = "bold"; // Optional, for better emphasis
+  endMessage.style.fontSize = "24px";
+  endMessage.style.fontWeight = "bold";
   endMessage.style.textAlign = "center";
 
-  // Append the end message to the board
   board!.appendChild(endMessage);
   board!.style.backgroundColor = "yellow";
   board!.style.lineHeight = "normal";
@@ -403,7 +376,6 @@ const endGame = (message: string) => {
   document.querySelector(".wait")?.classList.add("hidden");
 };
 
-/** ✅ Handles player number selection */
 const setupPlayerTurn = () => {
   if (!playerTurn || gameEnd) return;
   document.querySelector(".turn")!.style.fontWeight = "900";
@@ -418,7 +390,7 @@ const setupPlayerTurn = () => {
         usedNumbers.push(num);
         playerTurn = false;
 
-        duplicateAndAnimate(target, num.toString(), () => {
+        numAnimate(target, num.toString(), () => {
           if (!gameEnd) setTimeout(computerNumChoose, 100);
         });
       }
@@ -426,7 +398,6 @@ const setupPlayerTurn = () => {
   });
 };
 
-/** ✅ Handles computer's number selection */
 const computerNumChoose = () => {
   if (gameEnd) return;
   document.querySelector(".turn")!.style.fontWeight = "100";
@@ -442,7 +413,7 @@ const computerNumChoose = () => {
   const cells = document.querySelectorAll("#box2 .cell");
   for (const cell of cells) {
     if (cell.textContent?.trim() === String(num)) {
-      duplicateAndAnimate(cell as HTMLElement, num.toString(), () => {
+      numAnimate(cell as HTMLElement, num.toString(), () => {
         if (!gameEnd) {
           playerTurn = true;
           setupPlayerTurn();
@@ -453,7 +424,6 @@ const computerNumChoose = () => {
   }
 };
 
-/** ✅ Start button event listener */
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".start")?.addEventListener("click", generate);
 });

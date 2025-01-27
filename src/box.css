@@ -56,3 +56,11 @@ h2 {
     font-weight: bold;
   }
 }
+
+#box1 {
+  cursor: pointer;
+}
+
+#box2 {
+  cursor: not-allowed;
+}
