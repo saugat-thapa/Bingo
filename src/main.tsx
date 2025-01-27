@@ -1,5 +1,3 @@
-import { createRoot } from "react-dom/client";
-
 import "./container.css";
 import "./box.css";
 import "./misc.css";
@@ -96,7 +94,7 @@ const generate = () => {
   createGrid(computerGrid, 2);
 
   document.querySelector(".start")?.classList.add("hidden");
-  document.querySelector(".board")!.innerText = "";
+  (document.querySelector(".board") as HTMLElement)!.innerText = "";
   document.querySelector(".turn")?.classList.remove("hidden");
   document.querySelector(".wait")?.classList.remove("hidden");
   setupPlayerTurn();
@@ -204,13 +202,14 @@ const markNumberOnBoards = (num: number) => {
     for (let j = 0; j < col; j++) {
       if (playerGrid[i][j] === num) {
         playerMarked[i][j] = true;
-        let targetCell = playerCells[i * col + j];
+
+        let targetCell = playerCells[i * col + j] as HTMLElement;
         targetCell.style.background = "yellow";
         targetCell.classList.add("animated-number");
       }
       if (computerGrid[i][j] === num) {
         computerMarked[i][j] = true;
-        let targetCell = computerCells[i * col + j];
+        let targetCell = computerCells[i * col + j] as HTMLElement;
         targetCell.style.background = "yellow";
         targetCell.classList.add("animated-number");
       }
@@ -229,15 +228,13 @@ let markedRowsComputer: boolean[] = Array(row).fill(false);
 let markedColumnsComputer: boolean[] = Array(col).fill(false);
 let markedDiagonalsComputer: boolean[] = [false, false];
 
-const highlightBingoLetters = (
-  lineType: string,
-  index: number,
-  player: boolean
-) => {
+const highlightBingoLetters = (player: boolean) => {
   const bingoLetters = document.querySelectorAll(".b1 div");
   const bingoLettersComputer = document.querySelectorAll("#b2 div");
 
-  let targetLetters = player ? bingoLetters : bingoLettersComputer;
+  const targetLetters = Array.from(
+    player ? bingoLetters : bingoLettersComputer
+  ) as HTMLElement[];
 
   if (player) {
     switch (markedLinesPlayer) {
@@ -298,7 +295,7 @@ const checkForLine = (grid: boolean[][], player: boolean): boolean => {
   for (let i = 0; i < row; i++) {
     if (grid[i].every((cell) => cell) && !markedRows[i]) {
       markedRows[i] = true;
-      highlightBingoLetters("row", i, player);
+      highlightBingoLetters(player);
       if (player) markedLinesPlayer++;
       else markedLinesComputer++;
       return true;
@@ -308,7 +305,7 @@ const checkForLine = (grid: boolean[][], player: boolean): boolean => {
   for (let j = 0; j < col; j++) {
     if (grid.every((row) => row[j]) && !markedColumns[j]) {
       markedColumns[j] = true;
-      highlightBingoLetters("column", j, player);
+      highlightBingoLetters(player);
       if (player) markedLinesPlayer++;
       else markedLinesComputer++;
       return true;
@@ -317,7 +314,7 @@ const checkForLine = (grid: boolean[][], player: boolean): boolean => {
 
   if (grid.every((_, i) => grid[i][i]) && !markedDiagonals[0]) {
     markedDiagonals[0] = true;
-    highlightBingoLetters("diagonal", 0, player);
+    highlightBingoLetters(player);
     if (player) markedLinesPlayer++;
     else markedLinesComputer++;
     return true;
@@ -325,7 +322,7 @@ const checkForLine = (grid: boolean[][], player: boolean): boolean => {
 
   if (grid.every((_, i) => grid[i][col - i - 1]) && !markedDiagonals[1]) {
     markedDiagonals[1] = true;
-    highlightBingoLetters("diagonal", 4, player);
+    highlightBingoLetters(player);
     if (player) markedLinesPlayer++;
     else markedLinesComputer++;
     return true;
@@ -354,7 +351,7 @@ const checkLine = () => {
 
 const endGame = (message: string) => {
   gameEnd = true;
-  const board = document.querySelector(".board");
+  const board = document.querySelector(".board") as HTMLElement;
 
   board!.innerHTML = "";
 
@@ -378,8 +375,8 @@ const endGame = (message: string) => {
 
 const setupPlayerTurn = () => {
   if (!playerTurn || gameEnd) return;
-  document.querySelector(".turn")!.style.fontWeight = "900";
-  document.querySelector(".wait")!.style.fontWeight = "100";
+  (document.querySelector(".turn") as HTMLElement)!.style.fontWeight = "900";
+  (document.querySelector(".wait") as HTMLElement)!.style.fontWeight = "100";
   document.querySelectorAll("#box1 .cell").forEach((cell) => {
     cell.addEventListener("click", (event) => {
       if (!playerTurn || gameEnd) return;
@@ -400,8 +397,8 @@ const setupPlayerTurn = () => {
 
 const computerNumChoose = () => {
   if (gameEnd) return;
-  document.querySelector(".turn")!.style.fontWeight = "100";
-  document.querySelector(".wait")!.style.fontWeight = "900";
+  (document.querySelector(".turn") as HTMLElement)!.style.fontWeight = "100";
+  (document.querySelector(".wait") as HTMLElement)!.style.fontWeight = "900";
 
   let num: number;
   do {
